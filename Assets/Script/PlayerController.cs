@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,22 +6,42 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float _speed = 10.0f;
-    private float _yAngle = 0.0f;
+
+    private void Start()
+    {
+        Managers.Input.KeyAction += OnKeyboard;
+    }
+
     void Update()
     {
-        _yAngle += Time.deltaTime * 100;
-        transform.eulerAngles = new Vector3(0.0f, _yAngle, 0.0f);
+    }
+    
+    void OnKeyboard()
+    {float t = 0.1f;
         
         if (Input.GetKey(KeyCode.W))
+        {
+            //transform.rotation = Quaternion.LookRotation(Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), t);
             transform.Translate(Vector3.forward * Time.deltaTime * _speed);
-    
+        }
+
         if (Input.GetKey(KeyCode.S))
-            transform.Translate(Vector3.back * Time.deltaTime * _speed);
-    
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), t);
+            transform.Translate(Vector3.forward * Time.deltaTime * _speed);
+        }
+
         if (Input.GetKey(KeyCode.D))
-            transform.Translate(Vector3.right * Time.deltaTime * _speed);
-    
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), t);
+            transform.Translate(Vector3.forward * Time.deltaTime * _speed);
+        }
+
         if (Input.GetKey(KeyCode.A))
-            transform.Translate(Vector3.left * Time.deltaTime * _speed);
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), t);
+            transform.Translate(Vector3.forward * Time.deltaTime * _speed);
+        }
     }
 }
