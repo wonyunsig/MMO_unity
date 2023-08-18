@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Managers : MonoBehaviour
 {
-    private static Managers s_Instance; //유일성
-
-    public static Managers Instance
+    static Managers s_Instance;  //유일성
+    static Managers Instance
     {
         get
         {
@@ -17,13 +17,13 @@ public class Managers : MonoBehaviour
     }
 
     private InputManagers _input = new InputManagers();
-
     public static InputManagers Input
     {
         get { return Instance._input; }
     }
-    
+
     private ResourceManager _resource = new ResourceManager();
+    public static ResourceManager Resource
     {
         get { return Instance._resource; }
     }
@@ -45,7 +45,7 @@ public class Managers : MonoBehaviour
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
-                go = new GameObject() { name = "@Managers" };
+                go = new GameObject() { name = "@Managers"};
                 go.AddComponent<Managers>();
             }
             DontDestroyOnLoad(go);

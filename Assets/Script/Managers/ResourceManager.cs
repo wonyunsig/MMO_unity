@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 public class ResourceManager
@@ -15,18 +12,20 @@ public class ResourceManager
         GameObject prefab = Load<GameObject>($"Prefabs/{path}");
         if (prefab == null)
         {
-            Debug.Log($"Failed to load Prefab : {path}");
+            Debug.Log($"Failed to load prefab : {path}");
             return null;
         }
 
-        return object.Instantiate(prefab);
+        return Object.Instantiate(prefab);
     }
 
-    public void Destroy(GameObject go, float t =0)
+    public void Destroy(GameObject go, float t = 0)
     {
         if (go == null)
             return;
         
-        Object.Destroy(go);
+        Object.Destroy(go, t);
     }
+    
+    
 }
