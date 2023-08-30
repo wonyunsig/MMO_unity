@@ -6,42 +6,83 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float _speed = 10.0f;
-
-    private bool _moveToDest = false;
     private Vector3 _destPos;
-
-    private void Start()
+    
+    void Start()
     {
-        Managers.Input.KeyAction -= OnKeyboard;
-        Managers.Input.KeyAction += OnKeyboard;
-        Managers.Input.MosueAction -= OnMouseClicked;
-        Managers.Input.MosueAction += OnMouseClicked;
+        Managers.Input.MouseAction -= OnMouseClicked;
+        Managers.Input.MouseAction += OnMouseClicked;
     }
 
+    private float wait_run_ration = 0;
+    
+    public enum PlayerState
+    {
+        Die,
+        Moving,
+        Idle,
+    }
+
+    PlayerState _state = PlayerState.Idle;
+    
     private void Update()
     {
-        if (_moveToDest)
+        switch (_state)
         {
-            Vector3 dir = _destPos - transform.position;
-            if (dir.magnitude < 0.0001f)
+            case PlayerState.Die:
+                UpdateDie();
+                break;
+            case PlayerState.Moving:
+                UpdateMoving();
+                break;
+            case PlayerState.Idle:
+                UpdateIdle();
+                break;
+        }
+    }
+
+    private void UpdateIdle()
+    {
+        wait_run_ration = Mathf.Lerp(wait_run_ration, 0, 10 * Time.deltaTime);
+        Animator anim = GetComponent<Animator>();
+        anim.SetFloat("wait_run_ratio", wait_run_ration);
+        anim.Play("WAIT");
+    }
+
+    private void UpdateMoving()
+    {
+        Vector3 dir = _destPos - transform.position;
+        if (dir.magnitude < 0.0001f)
+        {
+            _state = PlayerState.Idle;
+        }
+        else
+        {
+            float moveDist = Math.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+            transform.position += dir.normalized * moveDist;
+
+            if (dir.magnitude > 0.01f)
             {
-                _moveToDest = false;
-            }
-            else
-            {
-                float moveDist = Math.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
-                transform.position += dir.normalized * moveDist;
-                transform.LookAt(_destPos);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 50 * Time.deltaTime);
             }
         }
+        
+        //애니메이션
+        wait_run_ration = Mathf.Lerp(wait_run_ration, 1, 10 * Time.deltaTime);
+        Animator anim = GetComponent<Animator>();
+        anim.SetFloat("wait_run_ratio", wait_run_ration);
+        anim.Play("RUN");
+    }
+
+    private void UpdateDie()
+    {
+        //아무것도 못함
     }
 
     private void OnMouseClicked(Define.MouseEvent obj)
     {
-        if (obj != Define.MouseEvent.Click)
+        if (_state == PlayerState.Die) //Managers.Input.MouseAction으로 콜백 받음으로 update 외에서 호출 일어날 수 있음.
             return;
-        
-        Debug.Log("OnMouseClicked !");
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red, 1.0f);
@@ -50,36 +91,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Wall")))
         {
             _destPos = hit.point;
-            _moveToDest = true;
+            _state = PlayerState.Moving;
         }
-    }
-    
-    private void OnKeyboard()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
-            transform.position += Vector3.forward * Time.deltaTime * _speed;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
-            transform.position += Vector3.back * Time.deltaTime * _speed;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
-            transform.position += Vector3.right * Time.deltaTime * _speed;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
-            transform.position += Vector3.left * Time.deltaTime * _speed;
-        }
-
-        _moveToDest = false;
     }
 }

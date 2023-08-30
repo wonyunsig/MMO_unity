@@ -7,7 +7,7 @@ using UnityEngine;
 public class InputManagers
 {
     public Action KeyAction = null;
-    public Action<Define.MouseEvent> MosueAction = null;
+    public Action<Define.MouseEvent> MouseAction = null;
 
     private bool _pressed = false;
 
@@ -16,18 +16,18 @@ public class InputManagers
         if (Input.anyKey && KeyAction != null)
             KeyAction.Invoke();
 
-        if (MosueAction != null)
+        if (MouseAction != null)
         {
             if (Input.GetMouseButton(0))
             {
-                MosueAction.Invoke(Define.MouseEvent.Press);
+                MouseAction.Invoke(Define.MouseEvent.Press);
                 _pressed = true;
             }
             else
             {
                 if (_pressed)
                 {
-                    MosueAction.Invoke(Define.MouseEvent.Click);
+                    MouseAction.Invoke(Define.MouseEvent.Click);
                 }
                 _pressed = false;
             }
