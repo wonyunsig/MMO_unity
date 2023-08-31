@@ -45,8 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         wait_run_ration = Mathf.Lerp(wait_run_ration, 0, 10 * Time.deltaTime);
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("wait_run_ratio", wait_run_ration);
-        anim.Play("WAIT");
+        anim.SetFloat("speed", 0);
     }
 
     private void UpdateMoving()
@@ -70,8 +69,7 @@ public class PlayerController : MonoBehaviour
         //애니메이션
         wait_run_ration = Mathf.Lerp(wait_run_ration, 1, 10 * Time.deltaTime);
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("wait_run_ratio", wait_run_ration);
-        anim.Play("RUN");
+        anim.SetFloat("speed", _speed);
     }
 
     private void UpdateDie()
@@ -85,7 +83,7 @@ public class PlayerController : MonoBehaviour
             return;
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red, 1.0f);
+        Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.green, 1.0f);
 
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Wall")))
