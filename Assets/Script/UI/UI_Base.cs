@@ -41,4 +41,6 @@ public class UI_Base : MonoBehaviour
     protected Button GetButton(int idx) { return Get<Button>(idx); }
     
     protected GameObject GetGameObject(int idx) { return Get<GameObject>(idx); }
+    
+    protected Image GetImage(int idx) { return Get<Image>(idx); }
 }

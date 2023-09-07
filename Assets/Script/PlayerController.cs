@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     {
         Managers.Input.MouseAction -= OnMouseClicked;
         Managers.Input.MouseAction += OnMouseClicked;
-
-        Managers.Resource.Instantiate("UI/UI_Button");
     }
 
     private float wait_run_ration = 0;
