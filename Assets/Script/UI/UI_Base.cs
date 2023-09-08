@@ -58,6 +58,5 @@ public class UI_Base : MonoBehaviour
                 evt.OnDragHandler += action;
                 break;
         }
-        evt.OnDragHandler += action;
     }
 }
