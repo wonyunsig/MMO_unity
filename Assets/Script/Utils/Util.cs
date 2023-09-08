@@ -12,7 +12,7 @@ public class Util
         return transform.gameObject;
     }
     
-    public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : UnityEngine.Object
+    public static T FindChild<T>(GameObject go, string name = null, bool recursive = false) where T : Object
     {
         if (go == null)
             return null;
@@ -41,5 +41,14 @@ public class Util
             }
         }
         return null;
+    }
+
+    public static T GetOrAddComponent<T>(GameObject go) where T : Component
+    {
+        T component = go.GetComponent<T>();
+        if (component == null)
+            component = go.AddComponent<T>();
+        
+        return component;
     }
 }

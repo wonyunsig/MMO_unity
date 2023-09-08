@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_EventHandler : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class UI_EventHandler : MonoBehaviour, IDragHandler, IPointerClickHandler
 {
-    public Action<PointerEventData> OnBeginDragHandler = null;
-    public Action<PointerEventData> OnDragHandler = null;
+    public Action<PointerEventData> OnDragHandler = null; 
+    public Action<PointerEventData> OnClickHandler { get; set; }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        if(OnBeginDragHandler != null)
-            OnBeginDragHandler.Invoke(eventData);
-        Debug.Log("OnBeginDrag");
-    }
 
     public void OnDrag(PointerEventData eventData)
     {
         if(OnDragHandler != null)
             OnDragHandler.Invoke(eventData);
-        transform.position = eventData.position;
+        //transform.position = eventData.position;
         Debug.Log("OnDrag");
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (OnClickHandler != null)
+            OnClickHandler.Invoke(eventData);
+        Debug.Log("OnClick");
     }
 }
