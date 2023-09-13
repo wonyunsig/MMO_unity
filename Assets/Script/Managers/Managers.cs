@@ -7,26 +7,15 @@ using UnityEngine.PlayerLoop;
 public class Managers : MonoBehaviour
 {
     static Managers s_Instance;  //유일성
-    static Managers Instance
-    {
-        get
-        {
-            Init();
-            return s_Instance;
-        }
-    }
+    static Managers Instance { get { Init(); return s_Instance; } }
 
     private InputManagers _input = new InputManagers();
-    public static InputManagers Input
-    {
-        get { return Instance._input; }
-    }
-
     private ResourceManager _resource = new ResourceManager();
-    public static ResourceManager Resource
-    {
-        get { return Instance._resource; }
-    }
+    private UIManager _ui = new UIManager();
+    public static InputManagers Input { get { return Instance._input; } }
+    public static ResourceManager Resource { get { return Instance._resource; } }
+    
+    public static UIManager UI { get { return Instance._ui; } }
 
     private void Start()
     {
