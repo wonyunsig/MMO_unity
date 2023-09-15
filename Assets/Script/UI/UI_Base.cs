@@ -28,7 +28,7 @@ public class UI_Base : MonoBehaviour
         }
     }
 
-    private T Get<T>(int idx) where T : UnityEngine.Object
+    protected T Get<T>(int idx) where T : UnityEngine.Object
     {
         UnityEngine.Object[] objects = null;
         if (_objects.TryGetValue(typeof(T), out objects) == false)
