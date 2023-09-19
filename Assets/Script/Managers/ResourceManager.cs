@@ -7,7 +7,7 @@ public class ResourceManager
         return Resources.Load<T>(path);
     }
 
-    public GameObject Instantiate(string path)
+    public GameObject Instantiate(string path, Transform parent = null)
     {
         GameObject prefab = Load<GameObject>($"Prefabs/{path}");
         if (prefab == null)
@@ -16,7 +16,14 @@ public class ResourceManager
             return null;
         }
 
-        return Object.Instantiate(prefab);
+        GameObject go = Object.Instantiate(prefab, parent);
+        int index = go.name.IndexOf("(Clone)");
+        if (index > 0)
+        {
+            go.name = go.name.Substring(0, index);
+        }
+
+        return go;
     }
 
     public void Destroy(GameObject go, float t = 0)

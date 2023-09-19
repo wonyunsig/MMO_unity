@@ -19,6 +19,17 @@ public class UIManager
         }
     }
 
+    public T MakeSubItem<T>(Transform parent = null, string prefabName = null) where T : UI_Base
+    {
+        if (string.IsNullOrEmpty(prefabName))
+            prefabName = typeof(T).Name;
+
+        GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{prefabName}");
+        if (parent != null)
+            go.transform.SetParent(parent);
+        return Util.GetOrAddComponent<T>(go);
+    }
+
     public T ShowSceneUI<T>(string prefabName = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(prefabName))
