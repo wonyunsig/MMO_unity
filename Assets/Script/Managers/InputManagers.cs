@@ -16,7 +16,7 @@ public class InputManagers
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        
+
         if (Input.anyKey && KeyAction != null)
             KeyAction.Invoke();
 
@@ -33,8 +33,15 @@ public class InputManagers
                 {
                     MouseAction.Invoke(Define.MouseEvent.Click);
                 }
+
                 _pressed = false;
             }
         }
     }
+
+    public void Clear()
+        {
+            KeyAction = null;
+            MouseAction = null;
+        }
 }

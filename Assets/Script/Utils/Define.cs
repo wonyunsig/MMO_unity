@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class Define : MonoBehaviour
 {
+
+    public enum Scene
+    {
+        Unknown,
+        Login,
+        Lobby,
+        Game,
+    }
     
     public enum MouseEvent
     {
@@ -19,5 +27,12 @@ public class Define : MonoBehaviour
     {
         Click,
         Drag
+    }
+    
+    public enum Sound
+    {
+        Bgm,
+        Effect,
+        MaxCount
     }
 }
