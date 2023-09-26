@@ -14,7 +14,7 @@ public class LoginScene : BaseScene
         
         for (int i = 0; i < 10; i++)
         {
-            Managers.Resource.Instantiate("UnityChan");
+            //Managers.Resource.Instantiate("UnityChan");
         }
     }
 
