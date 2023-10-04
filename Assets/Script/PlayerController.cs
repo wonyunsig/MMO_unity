@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -49,25 +51,35 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("speed", 0);
     }
 
-    private void UpdateMoving()
-    {
-        Vector3 dir = _destPos - transform.position;
-        if (dir.magnitude < 0.00001f)
-        {
-            _state = PlayerState.Idle;
-            return;
-        }
-        
-        //이동
-        float moveDist = Math.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
-        transform.position += dir.normalized * moveDist;
-        if (dir.magnitude > 0.01f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir),
-                10 * Time.deltaTime);
-        }
-        
-        //애니메이션
+   private void UpdateMoving()
+   {
+       Vector3 dir = _destPos - transform.position;
+       if (dir.magnitude < 0.1f)
+       {
+           _state = PlayerState.Idle;
+       }
+       else
+       {
+           float moveDist = Math.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+
+
+           //이동
+           //transform.position += dir.normalized * moveDist;
+           NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
+           nma.Move(dir.normalized * moveDist);
+           
+           Debug.DrawRay(transform.position + Vector3.up * 0.5f, dir.normalized, Color.green);
+           if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
+           {
+               _state = PlayerState.Idle;
+               return;
+           }
+           if (dir.magnitude > 0.01f)
+           {
+               transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime); 
+           } 
+       } 
+       //애니메이션
         Animator anim = GetComponent<Animator>();
         anim.SetFloat("speed", _speed);
     }
@@ -83,7 +95,7 @@ public class PlayerController : MonoBehaviour
             return;
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red, 1.0f);
+        //Debug.DrawRay(Camera.main.transform.position, ray.direction * 100, Color.red, 1.0f);
 
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Wall")))
