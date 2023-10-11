@@ -11,8 +11,12 @@ public class GameScene : BaseScene
         SceneType = Define.Scene.Game;
         Managers.UI.ShowSceneUI<UI_Inven>();
 
-        Stat levelStat = Managers.Data.StatDic[1];
-        Debug.Log("levelStat.level : " + levelStat.level);
+        Dictionary<int, Data.Stat> dic = Managers.Data.StatDict;
+        //Stat stat = dic[0]; // Key not Found Exception
+        Data.Stat stat = dic[1];
+        //Debug.Log("levelStat.level : " + levelStat.level);
+
+        gameObject.GetOrAddComponent<CursorController>();
     }
 
     public override void Clear()
