@@ -1480,6 +1480,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8774820920623184447, guid: 0c1b6fd7928d90f42bf40a1b2f24eea8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
     - target: {fileID: 8774820920623539743, guid: 0c1b6fd7928d90f42bf40a1b2f24eea8, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -6644,6 +6648,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8788317594462522860, guid: 11e2fb08e5db84e4da374da48b2b2e29, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8788317594471923562, guid: 11e2fb08e5db84e4da374da48b2b2e29, type: 3}
       propertyPath: m_Name
       value: UnityChan

@@ -22,7 +22,7 @@ public class CursorController : MonoBehaviour
         _handIcon = Managers.Resource.Load<Texture2D>("Textures/Cursor/Hand");
     }
 
-    void UpdateMouseCursor()
+    void Update()
     {
         if (Input.GetMouseButton(0))
             return;
