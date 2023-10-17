@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
 
+        Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform);
+
         //UI_Button button = Managers.UI.ShowPopupUI<UI_Button>();
         //Managers.UI.ClosePopupUI(button);
     }
@@ -66,10 +68,10 @@ public class PlayerController : MonoBehaviour
                 UpdateDie();
                 break;
             case PlayerState.Idle :
-                UpdateMoving();
+                UpdateIdle();
                 break;
             case PlayerState.Moving :
-                UpdateIdle();
+                UpdateMoving();
                 break;            
             case PlayerState.Skill :
                 UpdateSkill();
@@ -79,7 +81,12 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateSkill()
     {
-        throw new NotImplementedException();
+        if (_lockTarget != null)
+        {
+            Vector3 dir = _lockTarget.transform.position - transform.position;
+            Quaternion quat = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, quat, 20 * Time.deltaTime);
+        }
     }
 
     void OnHitEvent()
@@ -94,17 +101,11 @@ public class PlayerController : MonoBehaviour
         {
             State = PlayerState.Skill;
         }
-        //Animator anim = GetComponent <Animator>();
-        //anim.SetBool("attack", false);
-
-        State = PlayerState.Idle;
     }
 
 
     private void UpdateIdle()
     {
-        Animator anim = GetComponent<Animator>();
-        anim.SetFloat("speed", 0);
     }
 
    private void UpdateMoving()
@@ -126,29 +127,24 @@ public class PlayerController : MonoBehaviour
            return;
        }
       
-           float moveDist = Math.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
-
-
-           //이동
-           //transform.position += dir.normalized * moveDist;
-           NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
-           nma.Move(dir.normalized * moveDist);
-           
-           Debug.DrawRay(transform.position + Vector3.up * 0.5f, dir.normalized, Color.green);
-           if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
-           {
-               if(Input.GetMouseButton(0) == false)
-                   State = PlayerState.Idle;
-               return;
-           }
-           if (dir.magnitude > 0.01f)
-           {
-               transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime); 
-           }
-           //애니메이션
-        Animator anim = GetComponent<Animator>();
-        anim.SetFloat("speed", _stat.MoveSpeed);
-    }
+       float moveDist = Math.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
+       //이동
+       //transform.position += dir.normalized * moveDist;
+       NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
+       nma.Move(dir.normalized * moveDist);
+       
+       Debug.DrawRay(transform.position + Vector3.up * 0.5f, dir.normalized, Color.green);
+       if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
+       {
+           if(Input.GetMouseButton(0) == false)
+               State = PlayerState.Idle;
+           return;
+       }
+       if (dir.magnitude > 0.01f)
+       {
+           transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime); 
+       }
+   }
 
     private void UpdateDie()
     {
@@ -182,9 +178,6 @@ public class PlayerController : MonoBehaviour
     }
     private void OnMouseEvent_IdleRun(Define.MouseEvent evt)
     {
-        if (State == PlayerState.Die)
-            return;
-        
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         bool raycastHit = Physics.Raycast(ray, out hit, 100, _mask);
