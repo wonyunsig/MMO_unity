@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Define : MonoBehaviour
 {
+    public enum State
+    {
+        Die,
+        Moving,
+        Idle,
+        Skill
+    }
     public enum Layer
     {
         Monster = 6,
