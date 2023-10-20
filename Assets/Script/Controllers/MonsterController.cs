@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class MonsterController : BaseController
 {
@@ -12,6 +13,7 @@ public class MonsterController : BaseController
 
     private void Start()
     {
+        WorldObjectType = Define.WorldObject.Monster;
         _stat = gameObject.GetComponent<Stat>();
 
         if (gameObject.GetComponentInChildren<UI_HPBar>() == null)
@@ -82,6 +84,10 @@ public class MonsterController : BaseController
             int damage = Mathf.Max(0, _stat.Attack - targetStat.Defense);
             targetStat.Hp -= damage;
 
+            if (targetStat.Hp <= 0)
+            {
+                GameObject.Destroy(targetStat.gameObject);
+            }
             if (targetStat.Hp > 0)
             {
                 float distance = (_lockTarget.transform.position - transform.position).magnitude;

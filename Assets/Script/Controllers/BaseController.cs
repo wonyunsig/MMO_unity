@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class BaseController : MonoBehaviour
 {
     [SerializeField] protected Define.State _state = Define.State.Idle;
     [SerializeField] protected Vector3 _destPos;
     [SerializeField] protected GameObject _lockTarget;
-    
+
+    public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
+
     public virtual Define.State State
     {
         get { return _state; }
