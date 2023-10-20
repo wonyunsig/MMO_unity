@@ -10,22 +10,23 @@ public class CameraController : MonoBehaviour
     [SerializeField] Define.CameraMode _mode = Define.CameraMode.QuaterView;
     [SerializeField] private Vector3 _delta = new Vector3(0, 6, -5);
     [SerializeField] private GameObject _player = null;
-    void Start()
+    
+    public void SetPlayer(GameObject player)
     {
-        
+        _player = player;
     }
 
     void LateUpdate()
     {
         if (_mode == Define.CameraMode.QuaterView)
         {
-            if (_player == null)
+            if (_player.isValid() == false)
             {
                 return;
             }
             RaycastHit hit;
             if (Physics.Raycast(_player.transform.position, _delta, out hit, _delta.magnitude,
-                    LayerMask.GetMask("Wall")))
+                    LayerMask.GetMask("Block")))
             {
                 float dist = (hit.point - _player.transform.position).magnitude * 0.8f;
                 transform.position = _player.transform.position + _delta.normalized * dist;
