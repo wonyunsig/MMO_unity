@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
@@ -8,7 +9,7 @@ using UnityEngine.Animations;
 public class MonsterController : BaseController
 {
     private Stat _stat;
-    [SerializeField] private float _scanRange = 10;
+    [SerializeField] private float _scanRange = 8;
     [SerializeField] private float _attackRange = 1;
 
     private void Start()
@@ -37,6 +38,8 @@ public class MonsterController : BaseController
 
     protected override void UpdateMoving()
     {
+        GameObject player = Managers.Game.GetPlayer();
+        float distance2 = (player.transform.position - transform.position).magnitude;
         //플레이어가 내 사정거리보다 가까우면 공격
         if (_lockTarget != null)
         {
@@ -49,6 +52,12 @@ public class MonsterController : BaseController
                 State = Define.State.Skill;
                 return;
             }
+        }
+        
+        if (distance2 > _scanRange)
+        {
+            State = Define.State.Idle; 
+            return;
         }
         
         //목적지 도착하면 정지
@@ -65,6 +74,7 @@ public class MonsterController : BaseController
         nma.speed = _stat.MoveSpeed;
         
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 50 * Time.deltaTime);
+        
     }
     protected override void UpdateSkill()
     {
