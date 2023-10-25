@@ -11,6 +11,7 @@ public class LoginScene : BaseScene
     {
         base.Init();
         SceneType = Define.Scene.Login;
+        Managers.UI.ShowPopupUI<UI_Button>();
         
         for (int i = 0; i < 10; i++)
         {

@@ -37,7 +37,7 @@ public class PlayerController : BaseController
 
     void OnHitEvent()
     {
-        Debug.Log("OnHitEvent");
+        Managers.Sound.Play("SoundEffect/Sword", Define.Sound.Effect);
 
         if (_lockTarget != null)
         {

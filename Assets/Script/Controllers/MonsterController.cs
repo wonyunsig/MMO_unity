@@ -56,6 +56,7 @@ public class MonsterController : BaseController
         
         if (distance2 > _scanRange)
         {
+            
             State = Define.State.Idle; 
             return;
         }

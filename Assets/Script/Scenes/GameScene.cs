@@ -18,6 +18,7 @@ public class GameScene : BaseScene
         GameObject go = new GameObject { name = "SpawningPool" };
         SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
         pool.SetKeepMonsterCount(5);
+        Managers.Sound.Play("BGM/Music", Define.Sound.Bgm);
     }
 
     public override void Clear()
