@@ -56,7 +56,8 @@ public class MonsterController : BaseController
         
         if (distance2 > _scanRange)
         {
-            
+            NavMeshAgent nma2 = gameObject.GetOrAddComponent<UnityEngine.AI.NavMeshAgent>();
+            nma2.SetDestination(transform.position);
             State = Define.State.Idle; 
             return;
         }
